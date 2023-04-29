@@ -1,18 +1,20 @@
 import { ToastContainer } from 'react-toastify';
 import { Component } from 'react';
 import { GlobalStyle } from 'GlobalStyle';
+
 import { Header } from './Searchbar/Searchbar';
 import 'react-toastify/dist/ReactToastify.css';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { GetImages } from './GetImages';
 import { Loader } from './Loader/Loader';
 import { ButtonLoadMore } from './Button/Button';
+import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
     data: null,
     dataTotal: [],
-    total: 0,
+    total: 1,
     page: 1,
     loading: false,
     error: null,
@@ -65,18 +67,27 @@ export class App extends Component {
       empty: false,
     });
   };
-  
 
   openModal = (largeImageURL, tags) => {
-    this.setState({ showModal: true });
+    this.setState({ showModal: true, largeImageURL, tags });
   };
 
   closeModal = () => {
-    this.setState({showModal: false});
+    this.setState({ showModal: false });
   };
 
   render() {
-    const { loading, dataTotal, total, error,empty } = this.state;
+    const {
+      loading,
+      dataTotal,
+      total,
+      page,
+      error,
+      empty,
+      showModal,
+      largeImageURL,
+      tags,
+    } = this.state;
 
     return (
       <>
@@ -85,16 +96,26 @@ export class App extends Component {
           <Header onSubmit={this.handleFormSubmit} />
           {loading && <Loader />}
 
-          {error && (<h2>Something went wrong: {error}!</h2>)
-          }
+          {error && <h2>Something went wrong: {error}!</h2>}
 
-          {empty && (<h2>Sorry, there are no images matching your search query. Please try again.</h2>)}
+          {empty && (
+            <h2>
+              Sorry, there are no images matching your search query. Please try
+              again.
+            </h2>
+          )}
 
           {dataTotal && (
             <ImageGallery imageData={dataTotal} openModal={this.openModal} />
           )}
 
-          {total / 12 > 1 && <ButtonLoadMore addPage={this.addPage} />}
+          {total / 12 > page && <ButtonLoadMore addPage={this.addPage} />}
+
+          {showModal && (
+            <Modal closeModal={this.closeModal}>
+              <img src={largeImageURL} alt={tags} />
+            </Modal>
+          )}
 
           <ToastContainer position="top-center" autoClose={3000} />
         </div>

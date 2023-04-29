@@ -1,7 +1,13 @@
 import { Component } from 'react';
 import { ImSearch } from 'react-icons/im';
 import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import {
+  Searchbar,
+  Form,
+  Button,
+  ButtonLabel,
+  Input,
+} from './Searchbar.styled';
 
 export class Header extends Component {
   state = {
@@ -9,12 +15,12 @@ export class Header extends Component {
   };
 
   handleDataChange = event => {
-    this.setState({ data: event.currentTarget.value.toLowerCase() });
+    this.setState({ data: event.currentTarget.value.toLowerCase().trim() });
   };
 
   handleSubmit = event => {
     event.preventDefault();
-    if (this.state.data.trim() === '') {
+    if (this.state.data === '') {
       toast.error('Please enter a value !');
       return;
     }
@@ -24,27 +30,14 @@ export class Header extends Component {
 
   render() {
     return (
-      <header
-      //  className="searchbar"
-      >
-        <form
-          onSubmit={this.handleSubmit}
-          //   className="form"
-        >
-          <button
-            type="submit"
-            //  className="button"
-          >
+      <Searchbar>
+        <Form onSubmit={this.handleSubmit}>
+          <Button type="submit">
             <ImSearch />
-            <span
-            //    clasNames="button-label"
-            >
-              Search
-            </span>
-          </button>
+            <ButtonLabel>Search</ButtonLabel>
+          </Button>
 
-          <input
-            //   className="input"
+          <Input
             type="text"
             value={this.state.data}
             autoComplete="off"
@@ -52,8 +45,8 @@ export class Header extends Component {
             placeholder="Search images and photos"
             onChange={this.handleDataChange}
           />
-        </form>
-      </header>
+        </Form>
+      </Searchbar>
     );
   }
 }
