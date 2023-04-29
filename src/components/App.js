@@ -97,10 +97,10 @@ export class App extends Component {
           <Header onSubmit={this.handleFormSubmit} />
           {loading && <Loader />}
 
-          {error && <h2>Something went wrong: {error}!</h2>}
+          {error && <h2 style={{ textAlign: 'center' }}>Something went wrong: {error}!</h2>}
 
           {empty && (
-            <h2>
+            <h2 style={{ textAlign: 'center' }}>
               Sorry, there are no images matching your search query. Please try
               again.
             </h2>
