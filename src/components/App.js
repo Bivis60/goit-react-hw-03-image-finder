@@ -9,6 +9,7 @@ import { GetImages } from './GetImages';
 import { Loader } from './Loader/Loader';
 import { ButtonLoadMore } from './Button/Button';
 import { Modal } from './Modal/Modal';
+import { Layout } from 'Layout/Layout.styled';
 
 export class App extends Component {
   state = {
@@ -92,7 +93,7 @@ export class App extends Component {
     return (
       <>
         <GlobalStyle />
-        <div>
+        <Layout>
           <Header onSubmit={this.handleFormSubmit} />
           {loading && <Loader />}
 
@@ -118,7 +119,7 @@ export class App extends Component {
           )}
 
           <ToastContainer position="top-center" autoClose={3000} />
-        </div>
+        </Layout>
       </>
     );
   }
