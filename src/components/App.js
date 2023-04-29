@@ -1,4 +1,4 @@
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { Component } from 'react';
 import { GlobalStyle } from 'GlobalStyle';
 import { Header } from './Searchbar/Searchbar';
@@ -29,14 +29,18 @@ export class App extends Component {
     if (prevData !== currentData || prevStatePage !== page) {
       this.setState({ loading: true });
 
+      if (this.state.error) {
+        this.setState({ error: null });
+      }
+
       GetImages({ currentData, page })
         .then(data => {
           if (data.hits.length === 0) {
             this.setState({ empty: true });
           }
-          this.setState(prevSt => ({
-            page: prevSt.page,
-            dataTotal: [...prevSt.dataTotal, ...data.hits],
+          this.setState(prevState => ({
+            page: prevState.page,
+            dataTotal: [...prevState.dataTotal, ...data.hits],
             total: data.total,
           }));
         })
@@ -53,7 +57,7 @@ export class App extends Component {
     this.setState({
       data,
       dataTotal: [],
-      total: 0,
+      total: 1,
       page: 1,
       loading: false,
       error: null,
@@ -61,29 +65,40 @@ export class App extends Component {
       empty: false,
     });
   };
+  
 
   openModal = (largeImageURL, tags) => {
-    console.log(largeImageURL, tags);
+    this.setState({ showModal: true });
+  };
+
+  closeModal = () => {
+    this.setState({showModal: false});
   };
 
   render() {
-    const { loading, dataTotal } = this.state;
+    const { loading, dataTotal, total, error,empty } = this.state;
 
     return (
-      (
-        <>
-          <GlobalStyle />
-          <div>
-            <Header onSubmit={this.handleFormSubmit} />
-            {loading && <Loader />}
-            {dataTotal && (
-              <ImageGallery imageData={dataTotal} openModal={this.openModal} />
-            )}
-            <ButtonLoadMore addPage={this.addPage} />
-            <ToastContainer position="top-center" autoClose={3000} />
-          </div>
-        </>
-      )
+      <>
+        <GlobalStyle />
+        <div>
+          <Header onSubmit={this.handleFormSubmit} />
+          {loading && <Loader />}
+
+          {error && (<h2>Something went wrong: {error}!</h2>)
+          }
+
+          {empty && (<h2>Sorry, there are no images matching your search query. Please try again.</h2>)}
+
+          {dataTotal && (
+            <ImageGallery imageData={dataTotal} openModal={this.openModal} />
+          )}
+
+          {total / 12 > 1 && <ButtonLoadMore addPage={this.addPage} />}
+
+          <ToastContainer position="top-center" autoClose={3000} />
+        </div>
+      </>
     );
   }
 }
