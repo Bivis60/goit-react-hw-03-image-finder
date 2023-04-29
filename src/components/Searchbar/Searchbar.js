@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { ImSearch } from 'react-icons/im';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 
 export class Header extends Component {
   state = {
@@ -15,7 +15,7 @@ export class Header extends Component {
   handleSubmit = event => {
     event.preventDefault();
     if (this.state.data.trim() === '') {
-        toast.error('Please enter a value !');
+      toast.error('Please enter a value !');
       return;
     }
     this.props.onSubmit(this.state.data);
@@ -47,8 +47,8 @@ export class Header extends Component {
             //   className="input"
             type="text"
             value={this.state.data}
-            //   autocomplete="off"
-            //   autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
             onChange={this.handleDataChange}
           />
